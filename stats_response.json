@@ -1,0 +1,82 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Tue, 07 Oct 2025 22:33:10 GMT
+Content-Length: 1270
+Connection: close
+
+{
+  "MemStats": {
+    "mem_total": 16178312,
+    "mem_free": 1125780,
+    "mem_available": 2184568,
+    "buffers": 65796,
+    "cached": 1064896,
+    "swap_cached": 224,
+    "active": 704476,
+    "inactive": 13477080,
+    "active_anon": 9028,
+    "inactive_anon": 12993300,
+    "active_file": 695448,
+    "inactive_file": 483780,
+    "unevictable": 0,
+    "mlocked": 0,
+    "swap_total": 4194304,
+    "swap_free": 4184004,
+    "dirty": 368,
+    "write_back": 0,
+    "anon_pages": 13050704,
+    "mapped": 841632,
+    "shmem": 7496,
+    "slab": 294828,
+    "s_reclaimable": 127184,
+    "s_unclaim": 167644,
+    "kernel_stack": 33936,
+    "page_tables": 160568,
+    "nfs_unstable": 0,
+    "bounce": 0,
+    "writeback_tmp": 0,
+    "commit_limit": 12283460,
+    "committed_as": 17000668,
+    "vmalloc_total": 34359738367,
+    "vmalloc_used": 61028,
+    "vmalloc_chunk": 0,
+    "hardware_corrupted": 0,
+    "anon_huge_pages": 0,
+    "huge_pages_total": 0,
+    "huge_pages_free": 0,
+    "huge_pages_rsvd": 0,
+    "huge_pages_surp": 0,
+    "hugepagesize": 2048,
+    "direct_map_4k": 97280,
+    "direct_map_2M": 8093696,
+    "direct_map_1G": 16777216
+  },
+  "DiskStats": {
+    "all": 1081101176832,
+    "used": 288694403072,
+    "free": 792406773760,
+    "freeInodes": 64684292
+  },
+  "CpuStats": {
+    "id": "cpu",
+    "user": 4214634,
+    "nice": 42392,
+    "system": 3694694,
+    "idle": 1089832814,
+    "iowait": 121283,
+    "irq": 0,
+    "softirq": 371610,
+    "steal": 0,
+    "guest": 0,
+    "guest_nice": 0
+  },
+  "LoadStats": {
+    "last1min": 0.57,
+    "last5min": 0.56,
+    "last15min": 0.5,
+    "process_running": 2,
+    "process_total": 2100,
+    "last_pid": 3328163
+  },
+  "TaskCount": 0
+}

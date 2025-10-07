@@ -1,0 +1,2 @@
+# Get stats
+GET http://localhost:5555/stats HTTP/1.1

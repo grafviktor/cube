@@ -1,16 +1,27 @@
 package worker
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/c9s/goprocinfo/linux"
+	"github.com/shirou/gopsutil/load"
 )
+
+type CrossPlatformLoadAvg struct {
+	Last1Min       float64 `json:"last1min"`
+	Last5Min       float64 `json:"last5min"`
+	Last15Min      float64 `json:"last15min"`
+	ProcessRunning uint64  `json:"process_running"`
+	ProcessTotal   uint64  `json:"process_total"`
+	LastPID        uint64  `json:"last_pid"`
+}
 
 type Stats struct {
 	MemStats  *linux.MemInfo
 	DiskStats *linux.Disk
 	CpuStats  *linux.CPUStat
-	LoadStats *linux.LoadAvg
+	LoadStats *CrossPlatformLoadAvg
 	TaskCount int
 }
 
@@ -98,14 +109,39 @@ func GetCpuStats() *linux.CPUStat {
 }
 
 // GetLoadAvg See https://godoc.org/github.com/c9s/goprocinfo/linux#LoadAvg
-func GetLoadAvg() *linux.LoadAvg {
-	loadavg, err := linux.ReadLoadAvg("/proc/loadavg")
+// func GetLoadAvg() *linux.LoadAvg {
+// 	loadavg, err := linux.ReadLoadAvg("/proc/loadavg")
+// 	if err != nil {
+// 		log.Printf("Error reading from /proc/loadavg")
+// 		return &linux.LoadAvg{}
+// 	}
+
+// 	return loadavg
+// }
+
+func GetLoadAvg() *CrossPlatformLoadAvg {
+	loadavg, err := load.Avg()
 	if err != nil {
-		log.Printf("Error reading from /proc/loadavg")
-		return &linux.LoadAvg{}
+		fmt.Println("Load average not supported on this platform.")
+		return &CrossPlatformLoadAvg{}
 	}
 
-	return loadavg
+	miscStat, err := load.Misc()
+	if err != nil {
+		fmt.Println("Load average not supported on this platform.")
+		return &CrossPlatformLoadAvg{}
+	}
+
+	// loadavg.Load1, loadavg.Load5, loadavg.Load15
+
+	return &CrossPlatformLoadAvg{
+		Last1Min:       loadavg.Load1,
+		Last5Min:       loadavg.Load5,
+		Last15Min:      loadavg.Load15,
+		ProcessRunning: uint64(miscStat.ProcsRunning),
+		ProcessTotal:   uint64(miscStat.ProcsTotal),
+		LastPID:        uint64(miscStat.ProcsCreated),
+	}
 }
 
 /*
