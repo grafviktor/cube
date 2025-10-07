@@ -19,14 +19,6 @@ type Worker struct {
 	TaskCount int
 }
 
-func (w *Worker) GetTasks() []*task.Task {
-	values := make([]*task.Task, 0, len(w.Db))
-	for _, task := range w.Db {
-		values = append(values, task)
-	}
-	return values
-}
-
 func (w *Worker) CollectStats() {
 	fmt.Println("I will collect stats")
 }

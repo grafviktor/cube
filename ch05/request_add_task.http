@@ -1,0 +1,14 @@
+# Add a new task
+POST http://localhost:5555/tasks HTTP/1.1
+Content-Type: application/json
+
+{
+    "ID": "266592cd-960d-4091-981c-8c25c44b1018",
+    "State": 2,
+    "Task": {
+        "State": 1,
+        "ID": "266592cd-960d-4091-981c-8c25c44b1018",
+        "Name": "test-chapter-5-1",
+        "Image": "strm/helloworld-http"
+    }
+}

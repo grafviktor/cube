@@ -15,18 +15,26 @@ import (
 	"github.com/moby/moby/client"
 )
 
+type State int
+
+const (
+	Pending State = iota
+	Scheduled
+	Running
+	Completed
+	Failed
+)
+
 type Task struct {
 	ID            uuid.UUID
-	ContainerID   string
 	Name          string
 	State         State
 	Image         string
-	Cpu           float64
-	Memory        int64
-	Disk          int64
+	Memory        int
+	Disk          int
 	ExposedPorts  nat.PortSet
 	PortBindings  map[string]string
-	RestartPolicy container.RestartPolicyMode
+	RestartPolicy string
 	StartTime     time.Time
 	FinishTime    time.Time
 }
@@ -53,18 +61,6 @@ type Config struct {
 	RestartPolicy container.RestartPolicyMode
 }
 
-func NewConfig(t *Task) *Config {
-	return &Config{
-		Name:          t.Name,
-		ExposedPorts:  t.ExposedPorts,
-		Image:         t.Image,
-		Cpu:           t.Cpu,
-		Memory:        t.Memory,
-		Disk:          t.Disk,
-		RestartPolicy: t.RestartPolicy,
-	}
-}
-
 type DockerResult struct {
 	Error       error
 	Action      string
@@ -75,16 +71,6 @@ type DockerResult struct {
 type Docker struct {
 	Client *client.Client
 	Config Config
-}
-
-func NewDocker(c *Config) *Docker {
-	dc, _ := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
-	// If you use colima, use this line instead
-	// dc, _ := client.NewClientWithOpts(client.WithHost("unix:///Users/$username/.colima/docker.sock"), client.WithAPIVersionNegotiation())
-	return &Docker{
-		Client: dc,
-		Config: *c,
-	}
 }
 
 func (d *Docker) Run() DockerResult {
