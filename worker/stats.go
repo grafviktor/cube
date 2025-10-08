@@ -6,7 +6,22 @@ import (
 
 	"github.com/c9s/goprocinfo/linux"
 	"github.com/shirou/gopsutil/load"
+	"github.com/shirou/gopsutil/v3/cpu"
 )
+
+type CrossPlatformCPUStat struct {
+	Id        string `json:"id"`
+	User      uint64 `json:"user"`
+	Nice      uint64 `json:"nice"`
+	System    uint64 `json:"system"`
+	Idle      uint64 `json:"idle"`
+	IOWait    uint64 `json:"iowait"`
+	IRQ       uint64 `json:"irq"`
+	SoftIRQ   uint64 `json:"softirq"`
+	Steal     uint64 `json:"steal"`
+	Guest     uint64 `json:"guest"`
+	GuestNice uint64 `json:"guest_nice"`
+}
 
 type CrossPlatformLoadAvg struct {
 	Last1Min       float64 `json:"last1min"`
@@ -20,7 +35,7 @@ type CrossPlatformLoadAvg struct {
 type Stats struct {
 	MemStats  *linux.MemInfo
 	DiskStats *linux.Disk
-	CpuStats  *linux.CPUStat
+	CpuStats  *CrossPlatformCPUStat
 	LoadStats *CrossPlatformLoadAvg
 	TaskCount int
 }
@@ -54,7 +69,6 @@ func (s *Stats) DiskUsed() uint64 {
 }
 
 func (s *Stats) CpuUsage() float64 {
-
 	idle := s.CpuStats.Idle + s.CpuStats.IOWait
 	nonIdle := s.CpuStats.User + s.CpuStats.Nice + s.CpuStats.System + s.CpuStats.IRQ + s.CpuStats.SoftIRQ + s.CpuStats.Steal
 	total := idle + nonIdle
@@ -98,14 +112,32 @@ func GetDiskInfo() *linux.Disk {
 }
 
 // GetCpuInfo See https://godoc.org/github.com/c9s/goprocinfo/linux#CPUStat
-func GetCpuStats() *linux.CPUStat {
-	stats, err := linux.ReadStat("/proc/stat")
-	if err != nil {
-		log.Printf("Error reading from /proc/stat")
-		return &linux.CPUStat{}
-	}
+// func GetCpuStats() *linux.CPUStat {
+// 	stats, err := linux.ReadStat("/proc/stat")
+// 	if err != nil {
+// 		log.Printf("Error reading from /proc/stat")
+// 		return &linux.CPUStat{}
+// 	}
 
-	return &stats.CPUStatAll
+// 	return &stats.CPUStatAll
+// }
+
+func GetCpuStats() *CrossPlatformCPUStat {
+	cpuTimes, _ := cpu.Times(false)
+	t := cpuTimes[0]
+	return &CrossPlatformCPUStat{
+		Id:        t.CPU,
+		User:      uint64(t.User),
+		Nice:      uint64(t.Nice),
+		System:    uint64(t.System),
+		Idle:      uint64(t.Idle),
+		IOWait:    uint64(t.Iowait),
+		IRQ:       uint64(t.Irq),
+		SoftIRQ:   uint64(t.Softirq),
+		Steal:     uint64(t.Steal),
+		Guest:     uint64(t.Guest),
+		GuestNice: uint64(t.GuestNice),
+	}
 }
 
 // GetLoadAvg See https://godoc.org/github.com/c9s/goprocinfo/linux#LoadAvg
