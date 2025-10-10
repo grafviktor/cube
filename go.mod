@@ -3,14 +3,12 @@ module cube
 go 1.24.2
 
 require (
-	github.com/c9s/goprocinfo v0.0.0-20210130143923-c95fcf8c64a8
 	github.com/docker/go-connections v0.6.0
 	github.com/go-chi/chi/v5 v5.2.3
 	github.com/golang-collections/collections v0.0.0-20130729185459-604e922904d3
 	github.com/google/uuid v1.6.0
 	github.com/moby/moby/api v1.52.0-beta.1
 	github.com/moby/moby/client v0.1.0-beta.0
-	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.24.5
 )
 
