@@ -47,17 +47,29 @@ type TaskEvent struct {
 }
 
 type Config struct {
-	Name          string
-	AttachStdin   bool
-	AttachStdout  bool
-	AttachStderr  bool
-	ExposedPorts  nat.PortSet
-	Cmd           []string
-	Image         string
-	Cpu           float64
-	Memory        int64
-	Disk          int64
-	Env           []string
+	// Name of the task, also used as the container name
+	Name string
+	// AttachStdin boolean which determines if stdin should be attached
+	AttachStdin bool
+	// AttachStdout boolean which determines if stdout should be attached
+	AttachStdout bool
+	// AttachStderr boolean which determines if stderr should be attached
+	AttachStderr bool
+	// ExposedPorts list of ports exposed
+	ExposedPorts nat.PortSet
+	// Cmd to be run inside container (optional)
+	Cmd []string
+	// Image used to run the container
+	Image string
+	// Cpu
+	Cpu float64
+	// Memory in MiB
+	Memory int64
+	// Disk in GiB
+	Disk int64
+	// Env variables
+	Env []string
+	// RestartPolicy for the container ["", "always", "unless-stopped", "on-failure"]
 	RestartPolicy container.RestartPolicyMode
 }
 
