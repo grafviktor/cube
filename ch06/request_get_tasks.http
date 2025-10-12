@@ -1,0 +1,2 @@
+# Get all tasks
+GET http://localhost:5555/tasks HTTP/1.1
