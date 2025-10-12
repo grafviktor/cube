@@ -80,7 +80,9 @@ type Docker struct {
 func NewDocker(c *Config) *Docker {
 	dc, _ := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	// If you use colima, use this line instead
-	// dc, _ := client.NewClientWithOpts(client.WithHost("unix:///Users/$username/.colima/docker.sock"), client.WithAPIVersionNegotiation())
+	// home, _ := os.UserHomeDir()
+	// socketPath := fmt.Sprintf("unix://%s/.colima/docker.sock", home)
+	// dc, _ := client.NewClientWithOpts(client.WithHost(socketPath), client.WithAPIVersionNegotiation())
 	return &Docker{
 		Client: dc,
 		Config: *c,

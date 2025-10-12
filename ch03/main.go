@@ -48,8 +48,8 @@ func main() {
 
 	m := manager.Manager{
 		Pending: *queue.New(),
-		TaskDb:  make(map[string][]*task.Task),
-		EventDb: make(map[string][]*task.TaskEvent),
+		TaskDb:  make(map[uuid.UUID]*task.Task),
+		EventDb: make(map[uuid.UUID]*task.TaskEvent),
 		Workers: []string{w.Name},
 	}
 	fmt.Printf("manager: %v\n", m)
@@ -90,7 +90,9 @@ func createContainer() (*task.Docker, *task.DockerResult) {
 
 	dc, _ := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	// If you use colima, use this line instead
-	// dc, _ := client.NewClientWithOpts(client.WithHost("unix:///Users/$username/.colima/docker.sock"), client.WithAPIVersionNegotiation())
+	// home, _ := os.UserHomeDir()
+	// socketPath := fmt.Sprintf("unix://%s/.colima/docker.sock", home)
+	// dc, _ := client.NewClientWithOpts(client.WithHost(socketPath), client.WithAPIVersionNegotiation())
 	d := task.Docker{
 		Client: dc,
 		Config: c,
